@@ -2,10 +2,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ScottPlot;
-using ScottPlot.Drawing.Colormaps;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
 using Colors = QuestPDF.Helpers.Colors;
 using IContainer = QuestPDF.Infrastructure.IContainer;
 
@@ -13,8 +10,8 @@ namespace WinFormsReportes
 {
     public partial class Form1 : Form
     {
-        List<Persona> _listaPersonas;
-        List<ReporteEdades> reporte;
+        List<Persona> _listaPersonas = new List<Persona>();
+        List<ReporteSalario> reporte = new List<ReporteSalario>();
         public Form1()
         {
             InitializeComponent();
@@ -24,35 +21,35 @@ namespace WinFormsReportes
         {
             _listaPersonas =
             [
-                new Persona { id = 1, name = "Ana", age = 11 },
-                new Persona { id = 2, name = "Luis", age = 15},
-                new Persona { id = 3, name = "María", age = 19},
-                new Persona { id = 4, name = "Carlos", age = 21},
-                new Persona { id = 5, name = "Laura", age = 32 },
-                new Persona { id = 6, name = "Pedro", age = 33 },
+                new Persona { id = 1, name = "Ana", age = 11, salary = 1000 },
+                new Persona { id = 2, name = "Luis", age = 15, salary = 1200},
+                new Persona { id = 3, name = "María", age = 19, salary = 1300},
+                new Persona { id = 4, name = "Carlos", age = 21, salary = 1500},
+                new Persona { id = 5, name = "Laura", age = 32 , salary = 1350},
+                new Persona { id = 6, name = "Pedro", age = 33 , salary = 3100},
             ];
 
             bindingSource1.DataSource = _listaPersonas;
             btnGenerar_Click(null, null);
 
         }
-        public static List<ReporteEdades> ObtenerReportePorFranjaEtaria(List<Persona> personas)
+        public static List<ReporteSalario> ObtenerReportePorFranjaSalario(List<Persona> personas)
         {
             var franjas = new List<(int id, int desde, int hasta)>
                 {
-                    (1,0, 10),
-                    (2,11, 20),
-                    (3,21, 30),
-                    (4,31, 40),
-                    (5,41, 99),
+                    (1,0, 1000),
+                    (2,1001, 2000),
+                    (3,2001, 3000),
+                    (4,3001, 4000),
+                    (5,4001, 9999),
                 };
 
             var reporte = franjas.Select(f =>
-                new ReporteEdades
+                new ReporteSalario
                 {
                     id = f.id,
-                    franjaEtaria = $"{f.desde}-{f.hasta}",
-                    cantidad = personas.Count(p => p.age >= f.desde && p.age <= f.hasta)
+                    franjaSalario = $"{f.desde}-{f.hasta}",
+                    cantidad = personas.Count(p => p.salary >= f.desde && p.salary <= f.hasta)
                 }
             ).ToList();
 
@@ -95,7 +92,7 @@ namespace WinFormsReportes
                     page.Header()
                     .Background(Colors.White) // Asegurar que el fondo del encabezado sea blanco
                     .Padding(10)
-                    .Element(ComposeHeader(logo, ""));
+                    .Element(ComposeHeader(logo, "","Informe de personas"));
 
                     /*page.Header()                    
                         .Text("Informe de Socios")
@@ -111,7 +108,7 @@ namespace WinFormsReportes
                             {
                                 columns.ConstantColumn(90);
                                 columns.ConstantColumn(90);
-                                //columns.RelativeColumn();
+                                columns.RelativeColumn(90);
                                 columns.ConstantColumn(90);
                                 columns.ConstantColumn(90);
 
@@ -123,6 +120,7 @@ namespace WinFormsReportes
                                 header.Cell().Element(CellStyle).Text("Id").Bold();
                                 header.Cell().Element(CellStyle).Text("Nombre").Bold();
                                 header.Cell().Element(CellStyle).Text("Edad").Bold();
+                                header.Cell().Element(CellStyle).Text("Salario").Bold();
                                 header.Cell().Element(CellStyle).Text("Nacimiento").Bold();
                             });
 
@@ -133,6 +131,7 @@ namespace WinFormsReportes
                                 table.Cell().Element(CellStyle).Text(item.id);
                                 table.Cell().Element(CellStyle).Text(item.name);
                                 table.Cell().Element(CellStyle).Text(item.age);
+                                table.Cell().Element(CellStyle).Text(item.salary);
                                 table.Cell().Element(CellStyle).Text(item.birthday.ToString("dd/MM/yyyy"));
                                 //table.Cell().Element(CellStyle).Text(item.Price.ToString("C"));
                             }
@@ -151,9 +150,6 @@ namespace WinFormsReportes
             })
             .GeneratePdf(fileName);
 
-
-
-
             if (MessageBox.Show("El reporte se genero en " + fileName + ". Desea abrirlo?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 try
@@ -168,14 +164,13 @@ namespace WinFormsReportes
         }
         private void btnGenerar_Click(object sender, EventArgs e)
         {
-
             //obtengo la lista reporte a partir de la lista de personas
             int desde =Convert.ToInt16(txtEdad1.Text);
             int hasta = Convert.ToInt16(txtEdad2.Text);
 
-            var filtrado = _listaPersonas.Where(c => c.age >= desde && c.age <= hasta).ToList<Persona>();
+            _listaPersonas = _listaPersonas.Where(c => c.age >= desde && c.age <= hasta).ToList<Persona>();
 
-            reporte = ObtenerReportePorFranjaEtaria(filtrado);
+            reporte = ObtenerReportePorFranjaSalario(_listaPersonas);
 
             bindingSource2.DataSource = reporte;
 
@@ -184,7 +179,7 @@ namespace WinFormsReportes
         {
             btnGenerar_Click(null, null);
 
-            reporte = ObtenerReportePorFranjaEtaria(_listaPersonas);
+            reporte = ObtenerReportePorFranjaSalario(_listaPersonas);
 
             //Metodo muy importante, aca se genera la imagen (barras/torta) que se muestra en el reporte
             string pathImagenReporte = "";
@@ -223,7 +218,7 @@ namespace WinFormsReportes
                     page.Header()
                     .Background(Colors.White) // Asegurar que el fondo del encabezado sea blanco
                     .Padding(5)
-                    .Element(ComposeHeader(logo, filtrosAplicados));
+                    .Element(ComposeHeader(logo, filtrosAplicados,"Informe de salarios"));
 
                     page.Content()
                    .PaddingVertical(1, Unit.Centimetre)
@@ -250,7 +245,6 @@ namespace WinFormsReportes
             })
             .GeneratePdf(fileName);
 
-
             var mes = MessageBox.Show("El reporte se genero en " + fileName + ". Desea abrirlo?", "", MessageBoxButtons.YesNo);
 
             if (mes == DialogResult.Yes)
@@ -265,7 +259,7 @@ namespace WinFormsReportes
                 }
             }
         }
-        public string CrearImagenBarras(List<ReporteEdades> _datos)
+        public string CrearImagenBarras(List<ReporteSalario> _datos)
         {
             var ejeX = _datos.Select(d => (double)d.id).ToArray(); // edad en X        
             var cantidades = _datos.Select(d => (double)d.cantidad).ToArray(); // Cantidades en Y
@@ -275,11 +269,11 @@ namespace WinFormsReportes
             //plt.AddPie(cantidades);//, horas); otro tipo de grafico
 
             //plt.Title("Reporte de Ingresos por Hora");
-            plt.XLabel("Franja Etaria");
+            plt.XLabel("Franja Salarios");
             plt.YLabel("Cantidad");
 
             // Crear etiquetas para el eje X
-            string[] etiquetas = ejeX.Select(h => $"{reporte.FirstOrDefault(c=>c.id == h).franjaEtaria} años").ToArray(); // Crear etiquetas 
+            string[] etiquetas = ejeX.Select(h => $"{reporte.FirstOrDefault(c=>c.id == h).franjaSalario} USD").ToArray(); // Crear etiquetas 
 
             // Establecer etiquetas en el eje X usando Ticks
             plt.XTicks(ejeX, etiquetas); // Este método puede no estar disponible en tu versión
@@ -318,14 +312,14 @@ namespace WinFormsReportes
             // Establecer ticks en el eje Y
             plt.YTicks(yTicksValues, yTicksLabels); // Asignar ticks de Y
 
-            var archivo = StaticsFront.GenerarNombreArchivoUnico("ReporteEdadesBarra", "jpeg");
+            var archivo = StaticsFront.GenerarNombreArchivoUnico("ReporteSalariosBarra", "jpeg");
 
             string imagePath = @"C:\Reportes\" + archivo;
             plt.SaveFig(imagePath, 800, 600);
 
             return imagePath;
         }
-        public string CrearImagenTorta(List<ReporteEdades> _datos)
+        public string CrearImagenTorta(List<ReporteSalario> _datos)
         {
             var ejeX = _datos.Select(d => (double)d.id).ToArray(); // edad en X        
             var cantidades = _datos.Select(d => (double)d.cantidad).ToArray(); // Cantidades en Y
@@ -339,7 +333,7 @@ namespace WinFormsReportes
             .ToArray();
 
             // Crear etiquetas para el eje X
-            string[] etiquetas = ejeX.Select(h => $"{reporte.FirstOrDefault(c => c.id == h).franjaEtaria} años").ToArray(); // Crear etiquetas 
+            string[] etiquetas = ejeX.Select(h => $"{reporte.FirstOrDefault(c => c.id == h).franjaSalario} USD").ToArray(); // Crear etiquetas 
 
 
             // Crear el gráfico de torta
@@ -358,14 +352,14 @@ namespace WinFormsReportes
             var legend = plt.Legend();
             legend.ShadowOffsetX = -10;
 
-            var archivo = StaticsFront.GenerarNombreArchivoUnico("ReporteEdadesTorta", "jpeg");
+            var archivo = StaticsFront.GenerarNombreArchivoUnico("ReporteSalariosTorta", "jpeg");
 
             string imagePath = @"C:\Reportes\" + archivo;
             plt.SaveFig(imagePath, 800, 600);
 
             return imagePath;
         }
-        static Action<IContainer> ComposeHeader(byte[] imagePath, string filtrosAplicados)
+        static Action<IContainer> ComposeHeader(byte[] imagePath, string filtrosAplicados, string titulo)
         {
             return container =>
             {
@@ -390,7 +384,7 @@ namespace WinFormsReportes
                             .AlignTop()
                             .Padding(15)
                             .Background(Colors.White)
-                            .Text("       Informe de Personas")
+                            .Text(titulo)
                             .SemiBold().FontSize(15).FontColor(Colors.Blue.Medium);
 
                         row.ConstantItem(100)

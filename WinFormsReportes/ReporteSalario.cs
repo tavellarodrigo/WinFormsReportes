@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace WinFormsReportes
 {
-    public class ReporteEdades
+    public class ReporteSalario
     {
-        public string franjaEtaria {  get; set; }
-        public int id { get; set; }
-        //public int edad { get; set; } = 0;
+        public string franjaSalario {  get; set; }
+        public int id { get; set; }        
         public int cantidad { get; set; } = 0;
 
     }

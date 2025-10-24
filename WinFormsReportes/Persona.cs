@@ -11,7 +11,7 @@ namespace WinFormsReportes
         public int id {  get; set; }    
         public string name { get; set; }
         public int age { get; set; }
-        public DateTime birthday { get; set;
-        }
+        public DateTime birthday { get; set; }
+        public double salary { get; set; }
     }
 }

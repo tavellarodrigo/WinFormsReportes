@@ -35,13 +35,12 @@
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ageDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            salary = new DataGridViewTextBoxColumn();
             birthdayDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             bindingSource1 = new BindingSource(components);
             label2 = new Label();
             label3 = new Label();
             dataGridView2 = new DataGridView();
-            franjaEtariaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            cantidadDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             bindingSource2 = new BindingSource(components);
             btnGenerar = new Button();
             btnImprimirEdades = new Button();
@@ -52,6 +51,8 @@
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             groupBox1 = new GroupBox();
+            franjaSalario = new DataGridViewTextBoxColumn();
+            cantidadDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
@@ -86,7 +87,7 @@
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nameDataGridViewTextBoxColumn, ageDataGridViewTextBoxColumn, birthdayDataGridViewTextBoxColumn });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nameDataGridViewTextBoxColumn, ageDataGridViewTextBoxColumn, salary, birthdayDataGridViewTextBoxColumn });
             dataGridView1.DataSource = bindingSource1;
             dataGridView1.Location = new Point(12, 58);
             dataGridView1.Name = "dataGridView1";
@@ -110,6 +111,12 @@
             ageDataGridViewTextBoxColumn.DataPropertyName = "age";
             ageDataGridViewTextBoxColumn.HeaderText = "age";
             ageDataGridViewTextBoxColumn.Name = "ageDataGridViewTextBoxColumn";
+            // 
+            // salary
+            // 
+            salary.DataPropertyName = "salary";
+            salary.HeaderText = "salary";
+            salary.Name = "salary";
             // 
             // birthdayDataGridViewTextBoxColumn
             // 
@@ -150,7 +157,7 @@
             dataGridView2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView2.AutoGenerateColumns = false;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { franjaEtariaDataGridViewTextBoxColumn, cantidadDataGridViewTextBoxColumn });
+            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { franjaSalario, cantidadDataGridViewTextBoxColumn });
             dataGridView2.DataSource = bindingSource2;
             dataGridView2.Location = new Point(12, 342);
             dataGridView2.Name = "dataGridView2";
@@ -158,23 +165,9 @@
             dataGridView2.Size = new Size(824, 166);
             dataGridView2.TabIndex = 4;
             // 
-            // franjaEtariaDataGridViewTextBoxColumn
-            // 
-            franjaEtariaDataGridViewTextBoxColumn.DataPropertyName = "franjaEtaria";
-            franjaEtariaDataGridViewTextBoxColumn.HeaderText = "franjaEtaria";
-            franjaEtariaDataGridViewTextBoxColumn.Name = "franjaEtariaDataGridViewTextBoxColumn";
-            franjaEtariaDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // cantidadDataGridViewTextBoxColumn
-            // 
-            cantidadDataGridViewTextBoxColumn.DataPropertyName = "cantidad";
-            cantidadDataGridViewTextBoxColumn.HeaderText = "cantidad";
-            cantidadDataGridViewTextBoxColumn.Name = "cantidadDataGridViewTextBoxColumn";
-            cantidadDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
             // bindingSource2
             // 
-            bindingSource2.DataSource = typeof(ReporteEdades);
+            bindingSource2.DataSource = typeof(ReporteSalario);
             // 
             // btnGenerar
             // 
@@ -269,6 +262,20 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Tipo";
             // 
+            // franjaSalario
+            // 
+            franjaSalario.DataPropertyName = "franjaSalario";
+            franjaSalario.HeaderText = "franjaSalario";
+            franjaSalario.Name = "franjaSalario";
+            franjaSalario.ReadOnly = true;
+            // 
+            // cantidadDataGridViewTextBoxColumn
+            // 
+            cantidadDataGridViewTextBoxColumn.DataPropertyName = "cantidad";
+            cantidadDataGridViewTextBoxColumn.HeaderText = "cantidad";
+            cantidadDataGridViewTextBoxColumn.Name = "cantidadDataGridViewTextBoxColumn";
+            cantidadDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -313,11 +320,6 @@
         private Button btnImprimirEdades;
         private BindingSource bindingSource2;
         private DataGridViewTextBoxColumn franjaEtariaDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn cantidadDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn ageDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn birthdayDataGridViewTextBoxColumn;
         private TextBox txtEdad1;
         private TextBox txtEdad2;
         private Label label4;
@@ -325,5 +327,12 @@
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private GroupBox groupBox1;
+        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn ageDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn salary;
+        private DataGridViewTextBoxColumn birthdayDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn franjaSalario;
+        private DataGridViewTextBoxColumn cantidadDataGridViewTextBoxColumn;
     }
 }
