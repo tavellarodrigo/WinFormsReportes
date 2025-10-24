@@ -166,7 +166,6 @@ namespace WinFormsReportes
                 }
             }
         }
-
         private void btnGenerar_Click(object sender, EventArgs e)
         {
 
@@ -181,7 +180,6 @@ namespace WinFormsReportes
             bindingSource2.DataSource = reporte;
 
         }      
-
         private void btnImprimirEdades_Click(object sender, EventArgs e)
         {
             btnGenerar_Click(null, null);
@@ -267,7 +265,6 @@ namespace WinFormsReportes
                 }
             }
         }
-
         public string CrearImagenBarras(List<ReporteEdades> _datos)
         {
             var ejeX = _datos.Select(d => (double)d.id).ToArray(); // edad en X        
@@ -328,7 +325,6 @@ namespace WinFormsReportes
 
             return imagePath;
         }
-
         public string CrearImagenTorta(List<ReporteEdades> _datos)
         {
             var ejeX = _datos.Select(d => (double)d.id).ToArray(); // edad en X        
@@ -369,8 +365,6 @@ namespace WinFormsReportes
 
             return imagePath;
         }
-
-        #region Reportes
         static Action<IContainer> ComposeHeader(byte[] imagePath, string filtrosAplicados)
         {
             return container =>
@@ -423,10 +417,6 @@ namespace WinFormsReportes
                 .AlignMiddle()
                 .AlignCenter();
         }
-
-        #endregion
-
-
-   
+           
     }
 }
